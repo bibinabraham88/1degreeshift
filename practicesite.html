@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QEG - Quality Engineering Services</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        p {
+            line-height: 1.6;
+        }
+        .button, .submit-btn, .select-btn {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            background: #28a745;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .button:hover, .submit-btn:hover, .select-btn:hover {
+            background: #218838;
+        }
+        .dropdown-container {
+            margin: 20px 0;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        select, input[type="text"], input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .hidden {
+            display: none;
+        }
+        .required-asterisk {
+            color: red;
+            margin-left: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div id="home" class="container">
+        <h1>Welcome to QEG</h1>
+        <p>
+            QEG specializes in providing top-notch Quality Engineering services to software companies. Our expertise spans across various domains, ensuring that your software meets the highest quality standards. We offer a range of services including API Testing, UI Testing, and Performance Testing to cater to all your quality engineering needs.
+        </p>
+        <a href="#search" class="button">Start Search</a>
+    </div>
+
+    <div id="search" class="container hidden">
+        <h2>Search for Services</h2>
+        <form id="searchForm">
+            <div class="dropdown-container">
+                <label for="service">Select Service:</label>
+                <select id="service" name="service">
+                    <option value="api-testing">API Testing</option>
+                    <option value="ui-testing">UI Testing</option>
+                    <option value="performance-testing">Performance Testing</option>
+                </select>
+            </div>
+            <div class="dropdown-container">
+                <label for="type">Select Type:</label>
+                <select id="type" name="type">
+                    <option value="manual-testing">Manual Testing</option>
+                    <option value="automation-testing">Automation Testing</option>
+                </select>
+            </div>
+            <div class="dropdown-container">
+                <label for="duration">Select Duration:</label>
+                <select id="duration" name="duration">
+                    <option value="3-months">3 months</option>
+                    <option value="3-6-months">3 - 6 months</option>
+                    <option value="6-months">6 months+</option>
+                </select>
+            </div>
+            <a href="#" class="button" id="searchButton">Search</a>
+        </form>
+        <div id="results"></div>
+    </div>
+
+    <div id="formPage" class="container hidden">
+        <h2>Fill in Your Details</h2>
+        <form id="companyForm">
+            <label for="companyName">Company Name:<span class="required-asterisk">*</span></label>
+            <input type="text" id="companyName" name="companyName" required>
+
+            <label for="companyAddress1">Address Line 1:<span class="required-asterisk">*</span></label>
+            <input type="text" id="companyAddress1" name="companyAddress1" required minlength="3">
+
+            <label for="companyAddress2">Address Line 2:<span class="required-asterisk">*</span></label>
+            <input type="text" id="companyAddress2" name="companyAddress2" required minlength="3">
+
+            <label for="companyAddress3">Address Line 3:</label>
+            <input type="text" id="companyAddress3" name="companyAddress3">
+
+            <label for="postcode">Postcode:<span class="required-asterisk">*</span></label>
+            <input type="text" id="postcode" name="postcode" pattern="^[A-Z]{1,2}\d[A-Z\d]? \d[A-Z]{2}$" required>
+
+            <label for="contactName">Contact Person Name:<span class="required-asterisk">*</span></label>
+            <input type="text" id="contactName" name="contactName" required>
+
+            <label for="phoneNumber">Company Phone Number:<span class="required-asterisk">*</span></label>
+            <input type="text" id="phoneNumber" name="phoneNumber" pattern="\d+" required>
+
+            <label for="email">Company Email ID:<span class="required-asterisk">*</span></label>
+            <input type="email" id="email" name="email" required>
+
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+        <p id="successMessage" class="hidden">Thank you for your enquiry. We will contact you shortly.</p>
+    </div>
+
+    <script>
+        const searchButton = document.getElementById('searchButton');
+        const resultsDiv = document.getElementById('results');
+        const searchForm = document.getElementById('searchForm');
+        const homeDiv = document.getElementById('home');
+        const searchDiv = document.getElementById('search');
+        const formPageDiv = document.getElementById('formPage');
+        const companyForm = document.getElementById('companyForm');
+        const successMessage = document.getElementById('successMessage');
+
+        document.querySelector('.button').addEventListener('click', function(event) {
+            event.preventDefault();
+            homeDiv.style.display = 'none';
+            searchDiv.style.display = 'block';
+        });
+
+        searchButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            resultsDiv.innerHTML = ''; // Clear previous results
+            const service = searchForm.service.value;
+            const type = searchForm.type.value;
+            const duration = searchForm.duration.value;
+
+            // Example search results
+            const services = {
+                'ui-testing-manual-testing': [
+                    { name: 'UI Testing Basic', features: ['Feature 1'], amounts: { '3-months': '$400', '3-6-months': '$700', '6-months': '$1000' } },
+                    { name: 'UI Testing Standard', features: ['Feature 1', 'Feature 2'], amounts: { '3-months': '$800', '3-6-months': '$1400', '6-months': '$2000' } },
+                    { name: 'UI Testing Advanced', features: ['Feature 1', 'Feature 2', 'Feature 3'], amounts: { '3-months': '$1200', '3-6-months': '$2100', '6-months': '$3000' } }
+                ],
+                'ui-testing-automation-testing': [
+                    { name: 'UI Testing Automation Basic', features: ['Feature 1'], amounts: { '3-months': '$500', '3-6-months': '$900', '6-months': '$1300' } },
+                    { name: 'UI Testing Automation Standard', features: ['Feature 1', 'Feature 2'], amounts: { '3-months': '$1000', '3-6-months': '$1800', '6-months': '$2600' } },
+                    { name: 'UI Testing Automation Advanced', features: ['Feature 1', 'Feature 2', 'Feature 3'], amounts: { '3-months': '$1500', '3-6-months': '$2700', '6-months': '$3900' } }
+                ],
+                'api-testing-manual-testing': [
+                    { name: 'API Testing Basic', features: ['Feature 1', 'Feature 2'], amounts: { '3-months': '$600', '3-6-months': '$1100', '6-months': '$1600' } },
+                    { name: 'API Testing Standard', features: ['Feature 1', 'Feature 2', 'Feature 3'], amounts: { '3-months': '$1200', '3-6-months': '$2200', '6-months': '$3200' } },
+                    { name: 'API Testing Advanced', features: ['Feature 1', 'Feature 2', 'Feature 3'], amounts: { '3-months': '$1800', '3-6-months': '$3300', '6-months': '$4800' } }
+                ],
+                'api-testing-automation-testing': [
+                    { name: 'API Testing Automation Basic', features: ['Feature 1', 'Feature 2'], amounts: { '3-months': '$700', '3-6-months': '$1300', '6-months': '$1900' } },
+                    { name: 'API Testing Automation Standard', features: ['Feature 1', 'Feature 2', 'Feature 3'], amounts: { '3-months': '$1400', '3-6-months': '$2600', '6-months': '$3800' } },
+                    { name: 'API Testing Automation Advanced', features: ['Feature 1', 'Feature 2', 'Feature 3'], amounts: { '3-months': '$2100', '3-6-months': '$3900', '6-months': '$5700' } }
+                ],
+                'performance-testing-manual-testing': [
+                    { name: 'Performance Testing Basic', features: ['Feature 1', 'Feature 2'], amounts: { '3-months': '$800', '3-6-months': '$1500', '6-months': '$2200' } },
+                    { name: 'Performance Testing Standard', features: ['Feature 1', 'Feature 2', 'Feature 3'], amounts: { '3-months': '$1600', '3-6-months': '$3000', '6-months': '$4400' } },
+                    { name: 'Performance Testing Advanced', features: ['Feature 1', 'Feature 2', 'Feature 3'], amounts: { '3-months': '$2400', '3-6-months': '$4500', '6-months': '$6600' } }
+                ],
+                'performance-testing-automation-testing': [
+                    { name: 'Performance Testing Automation Basic', features: ['Feature 1', 'Feature 2'], amounts: { '3-months': '$900', '3-6-months': '$1700', '6-months': '$2500' } },
+                    { name: 'Performance Testing Automation Standard', features: ['Feature 1', 'Feature 2', 'Feature 3'], amounts: { '3-months': '$1800', '3-6-months': '$3400', '6-months': '$5000' } },
+                    { name: 'Performance Testing Automation Advanced', features: ['Feature 1', 'Feature 2', 'Feature 3'], amounts: { '3-months': '$2700', '3-6-months': '$5100', '6-months': '$7500' } }
+                ]
+            };
+
+            const results = services[`${service}-${type}`];
+
+            results.forEach((result, index) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <h3>${result.name}</h3>
+                    <p>Key Features: ${result.features.join(', ')}</p>
+                    <p>Amount: ${result.amounts[duration]}</p>
+                    <button class="select-btn" data-index="${index}">Select</button>
+                `;
+                resultsDiv.appendChild(card);
+            });
+
+            // Add event listeners to select buttons
+            document.querySelectorAll('.select-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    searchDiv.style.display = 'none';
+                    formPageDiv.style.display = 'block';
+                });
+            });
+        });
+
+        companyForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Check for valid email
+            const email = companyForm.email.value;
+            if (!email.includes('@')) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+
+            successMessage.style.display = 'block';
+            companyForm.reset();
+        });
+    </script>
+</body>
+</html>
